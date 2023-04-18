@@ -1,0 +1,7 @@
+bokeh>=2.4.3
+holoviews>=1.15.2
+numpy>=1.23.4
+pandas>=1.5.1
+panel>=0.14.1
+param>=1.12.2
+pybind11>=2.10.1
