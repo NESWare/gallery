@@ -81,6 +81,11 @@ def reset(event: pr.parameterized.Event | None) -> None:
         periodic_callback.stop()
     periodic_callback = None
     model = ParticleSystem(num_particles_slider.value, bounds_slider.value)
+    for particle in model.particles:
+        r = np.hypot(particle.x, particle.y)
+        if r > 1.0e-8:
+            particle.vx = -particle.y / r
+            particle.vy = particle.x / r
     particle_data = pd.DataFrame([[particle.x, particle.y] for particle in model.particles], columns=['x','y'])
     entity_pipe.send(particle_data)
 
@@ -115,7 +120,7 @@ pn.template.MaterialTemplate(
     site="Particle Model ",
     main=[
         # this is important! the DynamicMap ties the plotting callback to the pipe!
-        hv.DynamicMap(visualize_model, streams=[entity_pipe])
+        hv.DynamicMap(visualize_model, streams=[entity_pipe]).opts(framewise=True)
     ],
     sidebar=[
         num_particles_slider,
